@@ -6,11 +6,12 @@ import Servicios from './pages/Servicios.jsx'
 import Cotizar from './pages/Cotizar.jsx'
 import Solicitudes from './pages/Solicitudes.jsx'
 import Diagramas from './pages/Diagramas.jsx'
+import Manual from './pages/Manual.jsx'
+import Terminos from './pages/Terminos.jsx'
 
 export default function App() {
   return (
     <div className="app-wrapper">
-      {/* Blobs decorativos de fondo */}
       <div className="bg-blobs" aria-hidden="true">
         <span /><span /><span />
       </div>
@@ -23,6 +24,8 @@ export default function App() {
           <Route path="/cotizar" element={<Cotizar />} />
           <Route path="/solicitudes" element={<Solicitudes />} />
           <Route path="/diagramas" element={<Diagramas />} />
+          <Route path="/manual" element={<Manual />} />
+          <Route path="/terminos" element={<Terminos />} />
           <Route path="*" element={<Inicio />} />
         </Routes>
       </main>

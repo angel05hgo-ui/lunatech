@@ -439,6 +439,127 @@ a:hover { color: var(--acento-2); }
 .footer-col a:hover { color: var(--acento); }
 .footer-bottom { border-top: 1px solid var(--borde); text-align: center; padding: 1.2rem; font-size: .82rem; color: var(--texto-3); }
 
+/* ===== Modal ===== */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem; animation: fadeIn .2s ease;
+}
+.modal-box {
+  background: var(--surface); border: 1px solid var(--borde);
+  border-radius: 16px; padding: 2rem; width: 100%; max-width: 520px;
+  box-shadow: var(--sombra-lg); position: relative;
+  animation: modalSlide .3s cubic-bezier(.16,1,.3,1);
+}
+@keyframes modalSlide { from { opacity: 0; transform: scale(.93) translateY(20px); } }
+.modal-cerrar {
+  position: absolute; top: 1rem; right: 1rem;
+  background: var(--surface-2); border: 1px solid var(--borde);
+  border-radius: 50%; width: 32px; height: 32px;
+  cursor: pointer; font-size: .85rem; color: var(--texto-2);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.modal-cerrar:hover { background: var(--error); color: #fff; border-color: var(--error); }
+.modal-img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 1.2rem; }
+.modal-badge {
+  display: inline-block; padding: .25rem .75rem; border-radius: 20px;
+  background: var(--acento-bg); color: var(--acento); font-size: .78rem;
+  font-weight: 600; margin-bottom: .8rem;
+}
+.modal-precio { font-size: 1.6rem; color: var(--acento); font-family: 'Sora'; font-weight: 800; margin: .8rem 0 1rem; }
+
+/* ===== Carousel ===== */
+.carrusel {
+  position: relative; overflow: hidden; border-radius: 16px;
+  border: 1px solid var(--borde); background: var(--surface);
+  box-shadow: var(--sombra);
+}
+.carrusel-track {
+  display: flex; transition: transform .5s cubic-bezier(.16,1,.3,1);
+}
+.carrusel-slide {
+  min-width: 100%; padding: 3.5rem 4rem; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+}
+.carrusel-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--acento); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; font-weight: 700; font-family: 'Sora'; flex-shrink: 0;
+}
+.carrusel-texto {
+  font-size: 1.05rem; color: var(--texto); line-height: 1.75;
+  max-width: 540px; font-style: italic; border: none;
+}
+.carrusel-autor { display: flex; flex-direction: column; gap: .2rem; }
+.carrusel-autor strong { color: var(--texto); font-size: .9rem; }
+.carrusel-autor span { color: var(--texto-2); font-size: .82rem; }
+.carrusel-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: var(--surface); border: 1px solid var(--borde);
+  border-radius: 50%; width: 40px; height: 40px;
+  cursor: pointer; font-size: 1.3rem; color: var(--texto-2);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s; z-index: 2;
+}
+.carrusel-btn:hover { background: var(--acento); color: #fff; border-color: var(--acento); }
+.carrusel-btn-prev { left: 1rem; }
+.carrusel-btn-next { right: 1rem; }
+.carrusel-dots { display: flex; justify-content: center; gap: .5rem; padding: 1rem 1rem 1.5rem; }
+.carrusel-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  border: none; background: var(--borde-2); cursor: pointer;
+  transition: all .25s; padding: 0;
+}
+.carrusel-dot.activo { background: var(--acento); transform: scale(1.35); }
+
+/* ===== Acordeon / Colapsable ===== */
+.acordeon { display: flex; flex-direction: column; gap: .6rem; }
+.acordeon-item {
+  border: 1px solid var(--borde); border-radius: 10px;
+  background: var(--surface); overflow: hidden;
+  transition: border-color .25s, box-shadow .25s;
+}
+.acordeon-item.abierto { border-color: var(--acento); box-shadow: 0 0 0 3px var(--acento-bg); }
+.acordeon-btn {
+  width: 100%; display: flex; align-items: center; gap: .8rem;
+  padding: 1.1rem 1.4rem; background: none; border: none;
+  cursor: pointer; text-align: left; color: var(--texto);
+  font-family: 'Inter', sans-serif; font-size: .95rem;
+  transition: background .2s;
+}
+.acordeon-btn:hover { background: var(--surface-2); }
+.acordeon-titulo { flex: 1; font-weight: 600; }
+.acordeon-link {
+  font-size: .78rem; padding: .25rem .6rem; border-radius: 6px;
+  background: var(--acento-bg); color: var(--acento); font-weight: 600;
+  white-space: nowrap; transition: background .2s;
+}
+.acordeon-link:hover { background: var(--acento); color: #fff; }
+.acordeon-icono {
+  font-size: 1.2rem; color: var(--acento); font-weight: 700;
+  transition: transform .3s cubic-bezier(.16,1,.3,1);
+  flex-shrink: 0;
+}
+.acordeon-item.abierto .acordeon-icono { transform: rotate(180deg); }
+.acordeon-contenido {
+  overflow: hidden; transition: max-height .4s cubic-bezier(.16,1,.3,1);
+}
+.acordeon-lista {
+  padding: 0 1.4rem 1.4rem 1.4rem; margin: 0; margin-top: .2rem;
+  list-style: none; display: flex; flex-direction: column; gap: .55rem;
+}
+.acordeon-lista li {
+  padding-left: 1.2rem; position: relative; font-size: .9rem;
+  color: var(--texto-2); line-height: 1.65;
+}
+.acordeon-lista li::before {
+  content: ''; position: absolute; left: 0; top: .6em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--acento);
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 920px) {
   .hero { grid-template-columns: 1fr; gap: 3rem; }

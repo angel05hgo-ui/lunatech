@@ -1,18 +1,13 @@
-// Capa CRUD sobre LocalStorage para las solicitudes de clientes.
-// Los datos sensibles (nombre, rut, email, telefono) se guardan ENCRIPTADOS.
+// CRUD — LocalStorage con campos sensibles encriptados
 import { encriptar, desencriptar } from './crypto.js'
 
 const CLAVE = 'lunatech_solicitudes'
-
-// Campos sensibles que se cifran antes de almacenar
 const CAMPOS_SENSIBLES = ['nombre', 'rut', 'email', 'telefono', 'direccion']
 
 function cifrarSolicitud(solicitud) {
   const copia = { ...solicitud }
   CAMPOS_SENSIBLES.forEach((campo) => {
-    if (copia[campo] !== undefined) {
-      copia[campo] = encriptar(copia[campo])
-    }
+    if (copia[campo] !== undefined) copia[campo] = encriptar(copia[campo])
   })
   return copia
 }
@@ -20,54 +15,46 @@ function cifrarSolicitud(solicitud) {
 function descifrarSolicitud(solicitud) {
   const copia = { ...solicitud }
   CAMPOS_SENSIBLES.forEach((campo) => {
-    if (copia[campo] !== undefined) {
-      copia[campo] = desencriptar(copia[campo])
-    }
+    if (copia[campo] !== undefined) copia[campo] = desencriptar(copia[campo])
   })
   return copia
 }
 
-// READ: obtiene todas las solicitudes (descifradas para mostrar)
+// READ
 export function obtenerSolicitudes() {
   try {
     const data = localStorage.getItem(CLAVE)
     if (!data) return []
-    const lista = JSON.parse(data)
-    return lista.map(descifrarSolicitud)
-  } catch (e) {
+    return JSON.parse(data).map(descifrarSolicitud)
+  } catch {
     return []
   }
 }
 
-// READ crudo: devuelve las solicitudes tal como estan en storage (cifradas)
+// READ cifrado
 export function obtenerSolicitudesCifradas() {
   try {
     const data = localStorage.getItem(CLAVE)
     return data ? JSON.parse(data) : []
-  } catch (e) {
+  } catch {
     return []
   }
 }
 
 function persistir(listaDescifrada) {
-  const cifrada = listaDescifrada.map(cifrarSolicitud)
-  localStorage.setItem(CLAVE, JSON.stringify(cifrada))
+  localStorage.setItem(CLAVE, JSON.stringify(listaDescifrada.map(cifrarSolicitud)))
 }
 
-// CREATE: agrega una nueva solicitud
+// CREATE
 export function crearSolicitud(solicitud) {
   const lista = obtenerSolicitudes()
-  const nueva = {
-    ...solicitud,
-    id: Date.now(),
-    fechaRegistro: new Date().toLocaleString('es-CL')
-  }
+  const nueva = { ...solicitud, id: Date.now(), fechaRegistro: new Date().toLocaleString('es-CL') }
   lista.push(nueva)
   persistir(lista)
   return nueva
 }
 
-// UPDATE: actualiza una solicitud por id
+// UPDATE
 export function actualizarSolicitud(id, datos) {
   const lista = obtenerSolicitudes()
   const indice = lista.findIndex((s) => s.id === id)
@@ -77,7 +64,7 @@ export function actualizarSolicitud(id, datos) {
   return lista[indice]
 }
 
-// DELETE: elimina una solicitud por id
+// DELETE
 export function eliminarSolicitud(id) {
   const lista = obtenerSolicitudes().filter((s) => s.id !== id)
   persistir(lista)

@@ -4,6 +4,7 @@ import { servicios } from '../data/servicios.js'
 import ConvertidorDivisas from '../components/ConvertidorDivisas.jsx'
 import ServicioCard from '../components/ServicioCard.jsx'
 import Reveal from '../components/Reveal.jsx'
+import Carrusel from '../components/Carrusel.jsx'
 
 export default function Inicio() {
   const { monedaActiva, setMonedaActiva } = useMoneda()
@@ -11,7 +12,6 @@ export default function Inicio() {
 
   return (
     <div className="pagina inicio">
-      {/* HERO */}
       <section className="hero">
         <div className="hero-texto">
           <span className="hero-badge">Servicio tecnico de elite</span>
@@ -45,7 +45,7 @@ export default function Inicio() {
         </div>
       </section>
 
-      {/* SELECTOR DE MONEDA + CONVERTIDOR */}
+      {/* Selector de moneda + convertidor */}
       <section className="seccion">
         <Reveal>
           <div className="moneda-selector card">
@@ -64,13 +64,12 @@ export default function Inicio() {
             <p className="nota">Moneda por defecto: Peso Chileno (CLP). Los precios se actualizan dinamicamente.</p>
           </div>
         </Reveal>
-
         <Reveal delay={1}>
           <ConvertidorDivisas />
         </Reveal>
       </section>
 
-      {/* SERVICIOS DESTACADOS */}
+      {/* Servicios destacados */}
       <section className="seccion">
         <Reveal>
           <h2 className="seccion-titulo">Servicios <span>destacados</span></h2>
@@ -86,6 +85,17 @@ export default function Inicio() {
         <div className="centro">
           <Link to="/servicios" className="btn btn-primario">Ver todos los servicios</Link>
         </div>
+      </section>
+
+      {/* Carrusel de testimonios */}
+      <section className="seccion">
+        <Reveal>
+          <h2 className="seccion-titulo">Lo que dicen <span>nuestros clientes</span></h2>
+          <p className="seccion-intro">Opiniones de clientes reales que confiaron en LunaTech para sus equipos.</p>
+        </Reveal>
+        <Reveal delay={1}>
+          <Carrusel />
+        </Reveal>
       </section>
     </div>
   )

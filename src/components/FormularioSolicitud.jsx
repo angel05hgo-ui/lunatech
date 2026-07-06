@@ -15,8 +15,6 @@ const ESTADO_INICIAL = {
   comentario: ''
 }
 
-// Formulario de solicitud/cotizacion con validaciones estrictas.
-// Si recibe "solicitudEditar", funciona en modo edicion (UPDATE del CRUD).
 export default function FormularioSolicitud({ onGuardar, solicitudEditar, onCancelar }) {
   const { formatearPrecio } = useMoneda()
   const [form, setForm] = useState(ESTADO_INICIAL)
@@ -24,7 +22,6 @@ export default function FormularioSolicitud({ onGuardar, solicitudEditar, onCanc
   const [errores, setErrores] = useState({})
   const [edad, setEdad] = useState(null)
 
-  // Carga datos cuando se edita una solicitud existente
   useEffect(() => {
     if (solicitudEditar) {
       setForm({
@@ -43,56 +40,34 @@ export default function FormularioSolicitud({ onGuardar, solicitudEditar, onCanc
 
   function handleChange(e) {
     const { name, value } = e.target
-    let nuevoValor = value
-    if (name === 'rut') {
-      nuevoValor = formatearRut(value)
-    }
+    const nuevoValor = name === 'rut' ? formatearRut(value) : value
     setForm((prev) => ({ ...prev, [name]: nuevoValor }))
-    if (name === 'fechaNacimiento') {
-      setEdad(calcularEdad(value))
-    }
+    if (name === 'fechaNacimiento') setEdad(calcularEdad(value))
   }
 
-  // Seleccion multiple de servicios (toggle)
   function toggleServicio(id) {
     setServiciosSel((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     )
   }
 
-  // Validaciones estrictas de todos los campos
   function validar() {
     const err = {}
 
-    if (!form.nombre.trim()) {
-      err.nombre = 'El nombre es obligatorio.'
-    } else if (form.nombre.trim().length < 3) {
-      err.nombre = 'El nombre debe tener al menos 3 caracteres.'
-    } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(form.nombre.trim())) {
-      err.nombre = 'El nombre solo puede contener letras.'
-    }
+    if (!form.nombre.trim()) err.nombre = 'El nombre es obligatorio.'
+    else if (form.nombre.trim().length < 3) err.nombre = 'El nombre debe tener al menos 3 caracteres.'
+    else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(form.nombre.trim())) err.nombre = 'El nombre solo puede contener letras.'
 
-    if (!form.rut.trim()) {
-      err.rut = 'El RUT es obligatorio.'
-    } else if (!validarRut(form.rut)) {
-      err.rut = 'El RUT es invalido (formato o digito verificador).'
-    }
+    if (!form.rut.trim()) err.rut = 'El RUT es obligatorio.'
+    else if (!validarRut(form.rut)) err.rut = 'El RUT es invalido (formato o digito verificador).'
 
-    if (!form.email.trim()) {
-      err.email = 'El email es obligatorio.'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      err.email = 'Ingresa un email valido.'
-    }
+    if (!form.email.trim()) err.email = 'El email es obligatorio.'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) err.email = 'Ingresa un email valido.'
 
-    if (!form.telefono.trim()) {
-      err.telefono = 'El telefono es obligatorio.'
-    } else if (!/^\+?[0-9\s]{8,15}$/.test(form.telefono)) {
-      err.telefono = 'Ingresa un telefono valido (8 a 15 digitos).'
-    }
+    if (!form.telefono.trim()) err.telefono = 'El telefono es obligatorio.'
+    else if (!/^\+?[0-9\s]{8,15}$/.test(form.telefono)) err.telefono = 'Ingresa un telefono valido (8 a 15 digitos).'
 
-    if (!form.direccion.trim()) {
-      err.direccion = 'La direccion es obligatoria.'
-    }
+    if (!form.direccion.trim()) err.direccion = 'La direccion es obligatoria.'
 
     if (!form.fechaNacimiento) {
       err.fechaNacimiento = 'La fecha de nacimiento es obligatoria.'
@@ -102,9 +77,7 @@ export default function FormularioSolicitud({ onGuardar, solicitudEditar, onCanc
       else if (e < 18) err.fechaNacimiento = 'Debes ser mayor de 18 años.'
     }
 
-    if (serviciosSel.length === 0) {
-      err.servicios = 'Selecciona al menos un servicio.'
-    }
+    if (serviciosSel.length === 0) err.servicios = 'Selecciona al menos un servicio.'
 
     setErrores(err)
     return Object.keys(err).length === 0
@@ -119,14 +92,7 @@ export default function FormularioSolicitud({ onGuardar, solicitudEditar, onCanc
       return acc + (serv ? serv.precioCLP : 0)
     }, 0)
 
-    const datos = {
-      ...form,
-      edad: calcularEdad(form.fechaNacimiento),
-      servicios: serviciosSel,
-      totalCLP: total
-    }
-
-    onGuardar(datos)
+    onGuardar({ ...form, edad: calcularEdad(form.fechaNacimiento), servicios: serviciosSel, totalCLP: total })
 
     if (!solicitudEditar) {
       setForm(ESTADO_INICIAL)
@@ -135,7 +101,6 @@ export default function FormularioSolicitud({ onGuardar, solicitudEditar, onCanc
     }
   }
 
-  // Total dinamico segun moneda activa
   const totalCLP = serviciosSel.reduce((acc, id) => {
     const serv = servicios.find((s) => s.id === id)
     return acc + (serv ? serv.precioCLP : 0)

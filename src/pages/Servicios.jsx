@@ -1,11 +1,14 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { servicios } from '../data/servicios.js'
 import { useMoneda, MONEDAS } from '../context/MonedaContext.jsx'
 import ServicioCard from '../components/ServicioCard.jsx'
 import Reveal from '../components/Reveal.jsx'
+import Modal from '../components/Modal.jsx'
 
 export default function Servicios() {
-  const { monedaActiva, setMonedaActiva } = useMoneda()
+  const { monedaActiva, setMonedaActiva, formatearPrecio } = useMoneda()
+  const [modalServicio, setModalServicio] = useState(null)
 
   return (
     <div className="pagina">
@@ -32,11 +35,10 @@ export default function Servicios() {
           </div>
         </Reveal>
 
-        {/* Recorrido del arreglo de servicios con .map() + animacion escalonada */}
         <div className="servicios-grid">
           {servicios.map((s, i) => (
             <Reveal key={s.id} delay={(i % 3) + 1}>
-              <ServicioCard servicio={s} />
+              <ServicioCard servicio={s} onVerDetalles={() => setModalServicio(s)} />
             </Reveal>
           ))}
         </div>
@@ -45,6 +47,35 @@ export default function Servicios() {
           <Link to="/cotizar" className="btn btn-primario">Solicitar cotizacion</Link>
         </div>
       </section>
+
+      {/* Modal de detalles */}
+      <Modal abierto={!!modalServicio} onCerrar={() => setModalServicio(null)}>
+        {modalServicio && (
+          <>
+            <img
+              src={modalServicio.imagen}
+              alt={modalServicio.nombre}
+              className="modal-img"
+            />
+            <span className="modal-badge">{modalServicio.categoria || 'Servicio tecnico'}</span>
+            <h2 style={{ fontFamily: 'Sora, sans-serif', fontSize: '1.25rem', marginBottom: '.5rem' }}>
+              {modalServicio.nombre}
+            </h2>
+            <p style={{ color: 'var(--texto-2)', fontSize: '.92rem', lineHeight: 1.7, marginBottom: '.5rem' }}>
+              {modalServicio.descripcion}
+            </p>
+            <div className="modal-precio">{formatearPrecio(modalServicio.precioCLP)}</div>
+            <Link
+              to="/cotizar"
+              className="btn btn-primario"
+              style={{ width: '100%', textAlign: 'center', display: 'block' }}
+              onClick={() => setModalServicio(null)}
+            >
+              Solicitar este servicio
+            </Link>
+          </>
+        )}
+      </Modal>
     </div>
   )
 }

@@ -4,14 +4,8 @@ import { useState, useEffect } from 'react'
 function LogoIcon() {
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      {/* Círculo base */}
       <circle cx="16" cy="16" r="15" fill="var(--acento)" opacity="0.12" />
-      {/* Arco de luna creciente */}
-      <path
-        d="M20 8a9 9 0 1 0 0 16 7 7 0 1 1 0-16z"
-        fill="var(--acento)"
-      />
-      {/* Punto de luz / chip */}
+      <path d="M20 8a9 9 0 1 0 0 16 7 7 0 1 1 0-16z" fill="var(--acento)" />
       <circle cx="22" cy="11" r="2" fill="var(--acento)" opacity="0.5" />
     </svg>
   )
@@ -21,7 +15,7 @@ export default function Navbar() {
   const [abierto, setAbierto] = useState(false)
   const [oscuro, setOscuro] = useState(() => {
     const guardado = localStorage.getItem('tema')
-    return guardado ? guardado === 'dark' : true   // dark por defecto
+    return guardado ? guardado === 'dark' : true
   })
 
   useEffect(() => {
@@ -53,6 +47,8 @@ export default function Navbar() {
           <NavLink to="/cotizar" onClick={cerrar}>Cotizar</NavLink>
           <NavLink to="/solicitudes" onClick={cerrar}>Solicitudes</NavLink>
           <NavLink to="/diagramas" onClick={cerrar}>Diagramas</NavLink>
+          <NavLink to="/manual" onClick={cerrar}>Manual</NavLink>
+          <NavLink to="/terminos" onClick={cerrar}>Terminos</NavLink>
 
           <button className="btn-tema" onClick={() => setOscuro(v => !v)} aria-label="Cambiar tema">
             <span className="btn-tema-icon">{oscuro ? '☀' : '◑'}</span>
