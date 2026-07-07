@@ -168,69 +168,46 @@ export default function Terminos() {
   const [tab, setTab] = useState(0)
 
   useEffect(() => {
-    const links = FRAMEWORKS.map(({ id, css }) => {
-      const el = document.createElement('link')
-      el.id = `fw-${id}`
-      el.rel = 'stylesheet'
-      el.href = css
-      document.head.appendChild(el)
-      return el
-    })
+    // Limpia frameworks anteriores
+    FRAMEWORKS.forEach(({ id }) => document.getElementById(`fw-${id}`)?.remove())
+    document.getElementById('fw-override')?.remove()
 
-    // Neutraliza los resets globales de Bootstrap/Materialize/Bulma
+    const fw = FRAMEWORKS[tab]
+    const link = document.createElement('link')
+    link.id = `fw-${fw.id}`
+    link.rel = 'stylesheet'
+    link.href = fw.css
+    document.head.appendChild(link)
+
     const override = document.createElement('style')
     override.id = 'fw-override'
     override.textContent = `
-      body {
-        background-color: var(--bg) !important;
-        background-image: none !important;
-        color: var(--texto) !important;
-      }
+      body { background-color: var(--bg) !important; background-image: none !important; color: var(--texto) !important; }
       html:not([data-theme="dark"]) body {
         background-image: radial-gradient(#e4e4e7 1px, transparent 1px) !important;
-        background-size: 28px 28px !important;
-        background-attachment: fixed !important;
+        background-size: 28px 28px !important; background-attachment: fixed !important;
       }
-      header.navbar {
+      header, header.navbar, nav, header nav {
         background: rgba(245,244,240,0.88) !important;
-        backdrop-filter: blur(16px) saturate(1.4) !important;
-        border-bottom: 1px solid var(--borde) !important;
-        border-radius: 0 !important;
-        padding: 0 !important;
+        backdrop-filter: blur(16px) !important;
+        border-radius: 0 !important; padding: 0 !important;
+        box-shadow: none !important; border-bottom: 1px solid var(--borde) !important;
       }
-      html[data-theme="dark"] header.navbar {
+      html[data-theme="dark"] header, html[data-theme="dark"] header.navbar, html[data-theme="dark"] nav {
         background: rgba(15,15,19,0.88) !important;
       }
-      .card {
-        background-color: var(--surface) !important;
-        border-color: var(--borde) !important;
-        color: var(--texto) !important;
-      }
-      .accordion-item {
-        background-color: var(--surface) !important;
-        border-color: var(--borde) !important;
-      }
-      .accordion-button {
-        background-color: var(--surface) !important;
-        color: var(--texto) !important;
-      }
-      .accordion-button:not(.collapsed) {
-        background-color: var(--acento-bg) !important;
-        color: var(--acento) !important;
-        box-shadow: none !important;
-      }
-      .accordion-body {
-        background-color: var(--surface) !important;
-        color: var(--texto-2) !important;
-      }
+      .card { background-color: var(--surface) !important; border-color: var(--borde) !important; color: var(--texto) !important; }
+      .accordion-item { background-color: var(--surface) !important; border-color: var(--borde) !important; }
+      .accordion-button { background-color: var(--surface) !important; color: var(--texto) !important; box-shadow: none !important; }
+      .accordion-button:not(.collapsed) { background-color: var(--acento-bg) !important; color: var(--acento) !important; }
+      .accordion-body { background-color: var(--surface) !important; color: var(--texto-2) !important; }
+      .collection-item { background-color: var(--surface) !important; color: var(--texto) !important; border-color: var(--borde) !important; }
+      .box { background-color: var(--surface) !important; color: var(--texto) !important; }
     `
     document.head.appendChild(override)
 
-    return () => {
-      links.forEach((el) => el.remove())
-      override.remove()
-    }
-  }, [])
+    return () => { link.remove(); override.remove() }
+  }, [tab])
 
   const SECCIONES = [SeccionBootstrap, SeccionMaterialize, SeccionBulma]
   const Seccion = SECCIONES[tab]
