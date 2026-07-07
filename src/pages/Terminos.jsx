@@ -176,7 +176,32 @@ export default function Terminos() {
       document.head.appendChild(el)
       return el
     })
-    return () => links.forEach((el) => el.remove())
+
+    // Neutraliza los resets globales de Bootstrap/Materialize/Bulma
+    const override = document.createElement('style')
+    override.id = 'fw-override'
+    override.textContent = `
+      body { background-color: var(--bg) !important; color: var(--texto) !important; }
+      body:not([data-theme="dark"]) {
+        background-image: radial-gradient(#e4e4e7 1px, transparent 1px) !important;
+        background-size: 28px 28px !important;
+        background-attachment: fixed !important;
+      }
+      header.navbar {
+        background: rgba(245,244,240,0.88) !important;
+        backdrop-filter: blur(16px) saturate(1.4) !important;
+        border-bottom: 1px solid var(--borde) !important;
+      }
+      [data-theme="dark"] header.navbar {
+        background: rgba(15,15,19,0.88) !important;
+      }
+    `
+    document.head.appendChild(override)
+
+    return () => {
+      links.forEach((el) => el.remove())
+      override.remove()
+    }
   }, [])
 
   const SECCIONES = [SeccionBootstrap, SeccionMaterialize, SeccionBulma]
