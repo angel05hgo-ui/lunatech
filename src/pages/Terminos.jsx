@@ -181,8 +181,12 @@ export default function Terminos() {
     const override = document.createElement('style')
     override.id = 'fw-override'
     override.textContent = `
-      body { background-color: var(--bg) !important; color: var(--texto) !important; }
-      body:not([data-theme="dark"]) {
+      body {
+        background-color: var(--bg) !important;
+        background-image: none !important;
+        color: var(--texto) !important;
+      }
+      html:not([data-theme="dark"]) body {
         background-image: radial-gradient(#e4e4e7 1px, transparent 1px) !important;
         background-size: 28px 28px !important;
         background-attachment: fixed !important;
@@ -191,9 +195,33 @@ export default function Terminos() {
         background: rgba(245,244,240,0.88) !important;
         backdrop-filter: blur(16px) saturate(1.4) !important;
         border-bottom: 1px solid var(--borde) !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
       }
-      [data-theme="dark"] header.navbar {
+      html[data-theme="dark"] header.navbar {
         background: rgba(15,15,19,0.88) !important;
+      }
+      .card {
+        background-color: var(--surface) !important;
+        border-color: var(--borde) !important;
+        color: var(--texto) !important;
+      }
+      .accordion-item {
+        background-color: var(--surface) !important;
+        border-color: var(--borde) !important;
+      }
+      .accordion-button {
+        background-color: var(--surface) !important;
+        color: var(--texto) !important;
+      }
+      .accordion-button:not(.collapsed) {
+        background-color: var(--acento-bg) !important;
+        color: var(--acento) !important;
+        box-shadow: none !important;
+      }
+      .accordion-body {
+        background-color: var(--surface) !important;
+        color: var(--texto-2) !important;
       }
     `
     document.head.appendChild(override)
